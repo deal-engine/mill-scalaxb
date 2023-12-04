@@ -27,10 +27,8 @@ object meta {
 
 import meta._
 
-object scalaxb extends Cross[Scalaxb](crossVersions: _*)
-class Scalaxb(val crossScalaVersion: String)
-    extends CrossScalaModule
-    with PublishModule {
+object scalaxb extends Cross[Scalaxb](crossVersions)
+trait Scalaxb extends CrossScalaModule with PublishModule {
 
   override def publishVersion = meta.publishVersion
   override def artifactName = "mill-scalaxb"

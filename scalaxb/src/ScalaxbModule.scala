@@ -33,7 +33,10 @@ trait ScalaxbModule extends ScalaModule {
   override def generatedSources =
     super.generatedSources() ++ scalaxbGeneratedSources()
 
-  def scalaxbClasspath = resolveDeps(scalaxbIvyDeps)
+  def scalaxbClasspath = resolveDeps(T.task {
+    val bind = bindDependency()
+    scalaxbIvyDeps().map(bind)
+  })
 
   def scalaxbGeneratedSources =
     T[Seq[PathRef]] {
