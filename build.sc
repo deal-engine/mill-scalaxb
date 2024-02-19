@@ -4,11 +4,11 @@ import mill._, os._, scalalib._, publish._
 import scala.util.Properties
 
 object meta {
-  val crossVersions = Seq("2.13.8")
+  val crossVersions = Seq("2.13.12")
 
   implicit val wd: Path = pwd
 
-  def nonEmpty(s: String): Option[String] = s.trim match {
+  def nonEmpty(s: String): Option[String] = s.trim() match {
     case v if v.isEmpty => None
     case v              => Some(v)
   }
@@ -16,10 +16,10 @@ object meta {
   val MILL_VERSION = Properties.propOrNull("MILL_VERSION")
   val versionFromEnv = Properties.propOrNone("PUBLISH_VERSION")
   val gitSha = nonEmpty(
-    proc("git", "rev-parse", "--short", "HEAD").call().out.trim
+    proc("git", "rev-parse", "--short", "HEAD").call().out.trim()
   )
   val gitTag = nonEmpty(
-    proc("git", "tag", "-l", "-n0", "--points-at", "HEAD").call().out.trim
+    proc("git", "tag", "-l", "-n0", "--points-at", "HEAD").call().out.trim()
   )
   val publishVersion =
     (versionFromEnv orElse gitTag orElse gitSha).getOrElse("latest")
@@ -27,10 +27,8 @@ object meta {
 
 import meta._
 
-object scalaxb extends Cross[Scalaxb](crossVersions: _*)
-class Scalaxb(val crossScalaVersion: String)
-    extends CrossScalaModule
-    with PublishModule {
+object scalaxb extends Cross[Scalaxb](crossVersions)
+trait Scalaxb extends CrossScalaModule with PublishModule {
 
   override def publishVersion = meta.publishVersion
   override def artifactName = "mill-scalaxb"

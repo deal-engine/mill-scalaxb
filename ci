@@ -12,7 +12,7 @@ case "$1" in
  ;;
 
  mill-i)
-   exec $0 cs launch --scala 2.13.8 mill-interactive -- -i "${@:2}"
+   exec $0 cs launch --scala 2.13.8 mill -- -i "${@:2}"
  ;;
 
  scalafmt)

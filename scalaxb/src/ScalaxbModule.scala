@@ -5,7 +5,7 @@ import mill.modules.Jvm
 
 trait ScalaxbModule extends ScalaModule {
 
-  val scalaxbVersion = "1.7.3"
+  val scalaxbVersion = "1.12.0"
   def scalaxbIvyDeps = T { Agg(ivy"org.scalaxb::scalaxb:$scalaxbVersion") }
 
   def scalaxbDefaultPackage: T[String]
@@ -33,7 +33,10 @@ trait ScalaxbModule extends ScalaModule {
   override def generatedSources =
     super.generatedSources() ++ scalaxbGeneratedSources()
 
-  def scalaxbClasspath = resolveDeps(scalaxbIvyDeps)
+  def scalaxbClasspath = resolveDeps(T.task {
+    val bind = bindDependency()
+    scalaxbIvyDeps().map(bind)
+  })
 
   def scalaxbGeneratedSources =
     T[Seq[PathRef]] {
